@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Slider -->
+    <link href="css/slider.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript" src="js/swfobject.js"></script>
+    <script type="text/javascript" src="js/sms_setup.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+    <!-- Page Content Goes here --> 
+    <!-- ====================== -->
+
+    
+    <!-- <div class="container"> -->
+        <div class="navbar navbar-inverse" role="navigation">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                  <input type="email" class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-default btn-success">Submit</button>
+            </form>
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Hugo's Workshop</a>
+            </div>
+        </div><!-- end continer -->
+ 
+
+    <div class="container">
+        <div class="row">
+
+
+
+            <!-- video container -->
+            <div class="col-md-8 v-container">
+
+              <div style="width: 640px; height: 480px;">
+                  <div id="flashContent">
+                      <script type="text/javascript">
+                          var pageHost = ((document.location.protocol == "https:") ? "https://" : "http://");
+                          document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" );
+                      </script>
+
+                  </div>
+                  <div class=""> <!-- Controller Icons / Slider -->
+                      <!-- Glyphicons -->
+                      <!-- play/pause -->
+                      <span class="glyphicon glyphicon-play player-cont rspacer10" ></span>
+                      <span class="glyphicon glyphicon-pause player-cont rspacer10"></span>
+                      <!-- Slider -->
+                      <input class="slider player-slider" type="text" value="" data-slider-min="" data-slider-max="151"  data-slider-selection="after" data-slider-tooltip="show">
+
+                      <span class="minutes lspacer10"></span><span>:</span><span class="seconds"></span>
+                      <span> / </span>
+                      <span class="minutes-total"></span><span>:</span><span class="seconds-total"></span>
+                      
+
+                      <!-- ======================================================== -->
+                      <!-- volumes -->
+                      <span class="glyphicon glyphicon-volume-down player-cont rspacer10 lspacer10"></span>
+                      <span class="glyphicon glyphicon-volume-off player-cont rspacer10 lspacer10"></span>
+                      <span class="glyphicon glyphicon-volume-up player-cont rspacer10 lspacer10"></span>
+                      <!-- ======================================================== -->
+                      <!-- Volume Slider -->
+                      <input class="slider volume-slider" data-slider-tooltip="hide" data-slider-selection="after" data-slider-handle="triangle" >
+                      <!-- Recording Options -->
+                      <span class="glyphicon glyphicon-record player-cont lspacer10"></span>
+                      <span class="glyphicon glyphicon-camera player-cont lspaer10"></span>
+                  </div>
+              </div>
+
+            </div>
+
+
+
+            <div class="col-md-4">
+
+                <div class="media">
+                    <a class="pull-left" href="#"><img class="media-object" src="#" alt="..."></a>
+                    <div class="media-body">
+                      <h4 class="media-heading">Joe Cabalti</h4>
+                      <p>stupid! </p>
+                    </div>
+                </div>
+                 <div class="media">
+                    <a class="pull-left" href="#"><img class="media-object" src="#" alt="..."></a>
+                    <div class="media-body">
+                      <h4 class="media-heading">Avalon Tom </h4>
+                      <p>Those birds were epic</p>
+                    </div>
+                </div>
+
+                 <div class="media">
+                    <a class="pull-left" href="#"><img class="media-object" src="#" alt="..."></a>
+                    <div class="media-body">
+                      <h4 class="media-heading">Hugh Ybarra</h4>
+                      <p>I thought this was an epic video</p>
+                    </div>
+                </div>
+                 <div class="media">
+                    <a class="pull-left" href="#"><img class="media-object" src="#" alt="..."></a>
+                    <div class="media-body">
+                      <h4 class="media-heading">Hugh Ybarra</h4>
+                      <p>I thought this was an epic video</p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- comment container -->
+        </div>
+
+    </div><!-- end Video Player Div -->
+
+    <!-- End Page Content -->
+    <!-- ================ -->
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- slider for video player -->
+    <script src="js/bootstrap-slider.js"></script>
+    <!-- main.js -->
+    <script src="js/main.js"></script>
+  </body>
+</html>
