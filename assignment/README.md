@@ -1,4 +1,4 @@
-PHP-Template
+SMS Assignment 
 ============
 
-basic PHP template for quick development by Hugh Ybarra
+Simple website 
