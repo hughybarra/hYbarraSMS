@@ -7172,16 +7172,64 @@ td.visible-print {
 }
 
 .v-container{
+  width: 670px;
+  height: 550px;
+  background-color: grey;
+}
+
+.player-controls-box {
   width: 640px;
-  height: 480px;
-  /*background-color: grey;*/
+  height: 50px;
+  /*background-color: red;*/
 }
-/* Sliders */
-.player-slider{
+
+.player-controls-container {
+  margin-top: 10px;
+  width: 600px;
+  height: 25px;
+  margin-left: 10px;
+  float: left;
+  background-color: green;
+}
+
+.slider-bar {
+  margin-left: 5px;
+  margin-top: 5px;
+  float: left;
+  /* width = 300px */
   width: 300px;
+  height: 10px;
+  background-color: yellow;
+  cursor: pointer;
+
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px; /* future proofing */
+  -khtml-border-radius: 10px; /* for old Konqueror browsers */
 }
-.volume-slider{
-  width: 75px;
+
+.slider-handle {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  float: left;
+  cursor: pointer;
+}
+.glyphicon {
+  margin-top: 2px;
+}
+.minutes {
+  float: left;
+  margin-left: 10px;
+  margin-top: 5px;
+  height: 10px;
+}
+.minutes-total {
+  float:left;
+}
+.pull-left {
+  float: left;
 }
 
 

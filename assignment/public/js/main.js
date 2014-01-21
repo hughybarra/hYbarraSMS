@@ -1,167 +1,205 @@
-
-/* 
-
-SeekTime/Duration * width = Xpos 
-
-Xpos / Width * duraction = Seektime
-*/
-var playToggle = true;
-
-// replaces $(document).ready function
 var flashReady = function(){
 
-	// INITS
-	// bootstrap sliders
-	$('.slider').slider();
-	// initialize both sliders with value of 0
-	$(".player-slider").slider("setValue", 0);
-	$(".volume-slider").slider("setValue", 0);
-	// auto hide icons
-	// pause 
-	$(".glyphicon-pause").hide();
-	// volume icons
-	$(".glyphicon-volume-off").hide();
-	$(".glyphicon-volume-down").hide();
 
-	// Declaring Vars
-	var url = "rtmp://localhost/SMSServer";
-	
-	// Play Button
-	$(".glyphicon-play").click(function(){
-		console.log("play Clicked");
-		// swap icons
-		$(".glyphicon-play").hide();
-		$(".glyphicon-pause").show();
-
-		// Connect to Server
-		console.log(playToggle);
-
-		// Play toggle bool check
-		// checks to see if the video has already been started or not
-		if (playToggle){
-			flash.connect(url);
-			playToggle = false;
-		}else{
-			flash.playPause();
-		}
-	});// end play button
-	// ====================================
-	// Pause Button 
-	$(".glyphicon-pause").click(function(){
-		console.log("pause Clicked");
-		// swap icons
-		$(".glyphicon-pause").hide();
-		$(".glyphicon-play").show();
-
-		// pause the video 
-		flash.playPause();
-	});// end pause button
-	// ====================================
-
-
-
+	// Slider Init 
+	playerControllers();
 }
 
-// Flash Call Back Functions
-//===========================================
-//===========================================
+// Player Controllers
+// ===========================================
+// ===========================================
+var _mouseDown = false;
+var _firstClick = true;
+var _serverUrl = "rtmp://localhost/SMSServer";
+var _videoTitle = "startrekintodarkness_vp6";
+var _volume = 0;
 
-// Connected Function
-//=======================================
-var connected = function(success, error){
-	// Video name
-	var video = "startrekintodarkness_vp6";
-	// setting volume to 0
-	var volume = 0;
+var playerControllers = function(){
+	/* 
+		Player controllers Constructer function
+		builds all controller asstes 
+	*/
+	// declaring vars
+	var mouseX = 0;
+	var mouseY = 0;
+	var offset = 0;
+	var handle = $('.slider-handle');
+	var track = $('.slider-track');
 
-	console.log("Connected Is Running");
-	console.log(success);
-	console.log(error);
-	if(success){
-		flash.startPlaying(video);
-		flash.setVolume(volume);
+	// auto hide pause button
+	$('.glyphicon-pause').hide();
+	// icon toggle 
+
+	// Pause 
+	$('.glyphicon-pause').click(function(){
+		pauseVideo();
+	})// end pause click functions
+
+	//Play
+	$('.glyphicon-play').click(function(){
+		playVideo();
+	});// end click function
+
+	// handle slider functionality
+	$('.slider-handle').mousedown( function(e){
+		// get mouse
+		console.log('mousedown');
+		_mouseDown = true;
+		handleManager();
+		e.preventDefault();
+	});// end mouse down function
+	$(document).mouseup( function(e){
+		console.log('mouseup');
+		_mouseDown = false;
+	});// end mouse up function
+}// end player Controllers 
+// ===================
+
+// Mouse Events 
+// ===========================================
+// ===========================================
+
+// Play function
+var playVideo = function(){
+
+	console.log('play Clicked');
+	$('.glyphicon-pause').show();
+	$('.glyphicon-play').hide();
+
+	// first play click 
+	if (_firstClick){
+		// connect to the server
+		flash.connect(_serverUrl);
+		_firstClick = false;
+
 	}else{
-		console.log(error);
-	}
-}// end connected
+		flash.playPause();
+	}// end if 
 
-// seekTimer Function
-//============================
-var eliminator = 0;
-var minutes = 0;
+}// end playVideo 
+// ===================
+
+// Pause
+var pauseVideo = function(){
+
+	console.log('pause Clicked');
+	$('.glyphicon-pause').hide();
+	$('.glyphicon-play').show();
+
+	// pause the video 
+	flash.playPause();
+
+}// end pause Vidoe 
+// ===================
+
+// Handle Dragging function
+var handleManager = function(){
+	$(document).mousemove(function(e){
+		/* 
+		If the mouse is down get the position of the mouse 
+		set the slider to the position of the mouse
+		*/
+		if(_mouseDown){
+
+			mouseX = e.pageX;
+			mouseY = e.pageY;
+			handle = $('.slider-handle').offset().left;
+			handleWidth = $('.slider-handle').width();
+			bar = $('.slider-bar').offset().left;
+			// console.log(mouseX);
+			$('.slider-handle').offset({left: mouseX });
+
+
+			if (handle < bar){
+				console.log('lower');
+				$('.slider-handle').offset({left: bar});
+			}// end if 
+			if (handle > bar+ 300){
+				console.log('higher');
+				$('.slider-handle').offset({left: bar+300 - handleWidth});
+			}// end if 
+		}// end if 
+	});
+}// end Handle Manager
+// ===================
+
+// End Player Controllers
+// ===========================================
+// ===========================================
+
+// Call Back Functions 
+// ===========================================
+// ===========================================
+
+var connected = function(success, error){
+	/* 
+		This function is called after the NetStream has connected to the server.
+		@param success - (Boolean) if the connection was successful.
+		@param error - (String) the message if connection was unsuccessful.
+	*/	
+	console.log(success);
+
+	if (success){
+		console.log('running');
+		flash.startPlaying(_videoTitle);
+		flash.setVolume(_volume);
+	}else{
+		console.log('--------------------------------');
+		console.log('---- Connect Error Message -----');
+		console.log(message);
+		console.log('--------------------------------');
+	}
+}// end Connected 
+// ===================
+
 var seekTime = function(time){
-	// show timer
+	/*
+		This function is called when playing back a video.
+		@param time - (Number) holds the current time (in seconds) of the video.
+	*/
+}// end Seek Time 
+// ===================
 
-	// helper function 
-	// adds a 0 for non double digits
-	function minTwoDigits(n) {
-  		return (n < 10 ? '0' : '') + n;
-	}	
-	// Math.floor current time to cut the decimal
-	var seekTime = Math.floor(time);
-
-	// var durMinutes = $(".minutes-total").text();
-	// var durSeconds = $(".seconds-total").text();
-	// var duration= (durMinutes*60)+durSeconds;
-
-	var currentTime = Math.floor(time) - eliminator;
-	// console.log(currentTime);
-	// Counter Logic
-	if (currentTime >= 60){
-		eliminator += 60;
-		minutes += 1;
-	}
-	// console.log(eliminator);
-	$(".seconds").text(minTwoDigits(currentTime));
-	$(".minutes").text(minutes);
-
-	// animating the slider 
-	// LEFT OFF HERE ANIMATING THE SLIDER
-	// SLIDER IS WORKING BUT NOT CORRECTLY 
-	$(".player-slider").slider('setValue', seekTime);
-
-}// end seek Time
-
-// Get Duration Function
-//=======================================
 var getDuration = function(duration){
-	// console.log(duration);
+	/*
+		This function is called after the duration of a playback video has been determined. 
+		@param duration - (Number) holds the duration (in seconds) of the video currently being played back.
+	*/
 
-	// adds a 0 for non double digits
-	function minTwoDigits(n) {
-  		return (n < 10 ? '0' : '') + n;
-	}	
 
-	var videoDuration = Math.floor(Math.round(duration * 100)/100);
-	// console.log("video Duration");
-	// console.log(videoDuration);
+}// end get Duration 
+// ===================
 
-	var minutes = Math.floor(videoDuration/60);
-	// console.log("video minutes");
-	// console.log(minutes);
+var recordingError = function(message, code){
+	/*
+		This function is called if there is an error while recording.
+		@param message - (String) holds the message of what went wrong.
+		@param code - (String) the flash error code that was called.
+	*/
 
-	// minutes minus seconds
-	seconds = videoDuration-minutes*60;
-	// console.log("video seconds");
-	// console.log(seconds);
+}// end recording Error 
+// ===================
 
-	//Setting totals for timer
-	$(".minutes-total").text(minutes);
-	$(".seconds-total").text(minTwoDigits(seconds));
-	// $(".seconds").text(0);
-	$(".minutes").text(0);
+var globalError = function(message){
+	/* 
+		This function is called if there are any flash errors.
+		@param message - (String) holds the message of what went wrong.
+	*/
+	console.log('------------------------');
+	console.log('---- Error Message -----');
+	console.log(message);
+	console.log('------------------------');
+}// end global ERror
+// ===================
 
-	// setting the max value of the slider 
-	// NOT SURE IF THESE ARE WORKING 
-	// HAVE TO FIX THIS 
-	$(".player-slider").slider(min, 0);
-	$(".player-slider").slider(max, videoDuration);
 
-}// end get Duration
 
-// Global Error Function
-//=================================
-var globalError = function(message)
-{
-	console.log('message',message);
-}// end Global Error
+
+// End CallBack Functions
+// ===========================================
+// ===========================================
+
+
+
+
+
