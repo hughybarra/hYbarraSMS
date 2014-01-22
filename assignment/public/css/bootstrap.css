@@ -7192,6 +7192,28 @@ td.visible-print {
   background-color: green;
 }
 
+.sound-slider-bar{
+  margin-left: 5px;
+  margin-top: 5px;
+  float: left;
+  width: 100px;
+  height: 10px;
+  background-color: blue;
+  curos: pointer;
+
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px; /* future proofing */
+  -khtml-border-radius: 10px; /* for old Konqueror browsers */
+}
+.sound-slider-handle{
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+  float: left;
+  cursor: pointer;
+}
 .slider-bar {
   margin-left: 5px;
   margin-top: 5px;
@@ -7222,7 +7244,6 @@ td.visible-print {
 .minutes {
   float: left;
   margin-left: 10px;
-  margin-top: 5px;
   height: 10px;
 }
 .minutes-total {
