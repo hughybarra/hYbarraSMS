@@ -7184,17 +7184,24 @@ td.visible-print {
 }
 
 .player-controls-container {
-  margin-top: 10px;
-  width: 600px;
+  /*margin-top: 5px;*/
+  width: 640px;
   height: 25px;
-  margin-left: 10px;
+  /*margin-left: 10px;*/
   float: left;
-  background-color: green;
+  /*background-color: green;*/
 }
-
+.sound-slider {
+  /*background-color: pink;*/
+  height: 10px;
+  width: 110px;
+  float: left;
+  margin-left: 10px;
+  margin-top: 5px;
+}
 .sound-slider-bar{
   margin-left: 5px;
-  margin-top: 5px;
+  /*margin-top: 5px;*/
   float: left;
   width: 100px;
   height: 10px;
@@ -7240,6 +7247,7 @@ td.visible-print {
 }
 .glyphicon {
   margin-top: 2px;
+  float: left;
 }
 .minutes {
   float: left;
@@ -7253,7 +7261,66 @@ td.visible-print {
   float: left;
 }
 
+.glyphicon-record{
+  /*margin-top: 20px;*/
+  float: left;
+  /*margin-left: 20px;*/
+  cursor: pointer;
+}
+.glyphicon-record{
+  margin-left: 20px;
+}
 
+.glyphicon-camera  {
+  margin-left: 10px;
+}
+.selected-device {
+  margin-left: 10px;
+  margin-top: 10px;
+  float: left;
+  cursor: pointer;
+}
+.glyphicon-remove-circle{
+  cursor: pointer;
+}
+.device-options{
+  position: absolute;
+  float: right;
+  width: 300px;
+  margin-left: 290px;
+  margin-top: 440px;
+  height: 50px;
+  border: 3px solid #000000;
+  border-radius: 20px 20px 5px;
+  background-color: #FFFFFF;
+
+    /* Required for IE 5, 6, 7 */
+  /* ...or something to trigger hasLayout, like zoom: 1; */
+    
+  /* Theoretically for IE 8 & 9 (more valid) */ 
+  /* ...but not required as filter works too */
+  /* should come BEFORE filter */
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  
+  /* This works in IE 8 & 9 too */
+  /* ... but also 5, 6, 7 */
+  filter: alpha(opacity=50);
+  
+  /* Older than Firefox 0.9 */
+  -moz-opacity:0.5;
+  
+  /* Safari 1.x (pre WebKit!) */
+  -khtml-opacity: 0.5;
+    
+  /* Modern!
+  /* Firefox 0.9+, Safari 2?, Chrome any?
+  /* Opera 9+, IE 9+ */
+  opacity: 0.5;
+}
+.glyphicon-play-circle{
+  margin-left: 10px;
+  cursor: pointer;
+}
 
 
 

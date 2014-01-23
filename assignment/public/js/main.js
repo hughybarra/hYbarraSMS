@@ -4,6 +4,13 @@ Formulas
 SeekTime / duration  * width  = Xpos
 
 Xpos /  Width  * duration = seektime
+
+Questions for the teacher
+
+1. start recording flash box pops up but I cant get it to do anything. suggestions?
+
+2. My sliders are very buggy. Any advice on how to fix this? 
+
 */
 
 var flashReady = function(){
@@ -17,17 +24,21 @@ var flashReady = function(){
 // ===========================================
 // ===========================================
 //duration/ time * width - posx 
-var _mouseDown 		= false;
-var _playerMouseDown = false;
-var _soundMouseDown = false;
-var _firstClick 	= true;
-var _serverUrl 		= "rtmp://localhost/SMSServer";
-var _videoTitle 	= "startrekintodarkness_vp6";
-var _volume 		= 0;
-var _totalMinutes 	= $('.minutes-total').val();
-var _minutes 		= $('.minutes').val();
-var _seekTime 		= 0;
-var _duration		= 0;
+var _mouseDown 			= false;
+var _playerMouseDown 	= false;
+var _soundMouseDown 	= false;
+var _firstClick 		= true;
+var _videoWidth 		= 300;
+var _serverUrl 			= "rtmp://localhost/SMSServer";
+var _videoTitle 		= "startrekintodarkness_vp6";
+var _volume 			= 5;
+var _totalMinutes 		= $('.minutes-total').val();
+var _minutes 			= $('.minutes').val();
+var _seekTime 			= 0;
+var _duration			= 0;
+var _recordingDevice 	= false;
+var _videoDevice 		= false;
+var _fileName 			= 'temp';
 
 
 var playerControllers = function(){
@@ -46,6 +57,14 @@ var playerControllers = function(){
 	// auto hide pause button
 	$('.glyphicon-pause').hide();
 	// icon toggle 
+	// auto hide glyph icons 
+	$('.glyphicon-volume-down').show();
+	$('.glyphicon-volume-up').hide();
+	$('.glyphicon-volume-off').hide();
+
+
+	// auto hide device options
+	$('.device-options').hide();
 
 	// Pause 
 	$('.glyphicon-pause').click(function(){
@@ -70,11 +89,17 @@ var playerControllers = function(){
 	});// end mouse down function
 	$(document).mouseup( function(e){
 		console.log('mouseup');
+		// check the position of the slider and set it
+		// if the video slider was clicked and this is the 
+		// mouse up for the click
+		if (_playerMouseDown){
+			setVideoSlider();
+		}// end if
+
 		_mouseDown = false;
 		_playerMouseDown = false;
 		_soundMouseDown = false;
 
-		// check the position of the slider and set it
 	});// end mouse up function
 
 	$('.sound-slider-handle').mousedown( function(e){
@@ -95,12 +120,132 @@ var playerControllers = function(){
 			handleManager('sound', e);
 		}
 	})// end mouse move function
+
+
+	// Record Icons 
+	// Record Video Hover Function
+	$('.glyphicon-record ').mouseenter( function(){
+		// call over function
+		recordOver();
+	}).mouseleave( function(){
+	} );
+
+	// Record Sound Hover Function 
+	$('.glyphicon-camera').mouseenter(function(){
+		videoOver();
+	}).mouseleave(function(){	
+	});// end sound hover function
+
+	// options div 
+	$('.glyphicon-remove-circle').click(function(e){
+		// clear out the div
+		$('.available-options').empty();
+		// hide the div
+		$('.device-options').hide();
+	});// end options div click function
+
+	// begin recording click function
+	$('.glyphicon-play-circle').click(function(e){
+		
+		console.log('begin recording');
+
+		// if chosen use select mic / video device
+
+		// check if mic has been selected
+		if (!_recordingDevice){
+			// use the first device as default
+			_recordingDevice = 0;
+
+		}
+		// check if video device has been selected
+		if (!_videoDevice){
+			// use the first device as default
+			_videoDevice = 0;
+		}
+		// start recording the video
+
+		console.log(_videoDevice);
+		console.log(_recordingDevice);
+		// the flash icon is popping up but I cant do anything 
+		// think its broken
+		flash.startRecording(_fileName,_videoDevice,_recordingDevice);
+	});
 }// end player Controllers 
 // ===================
 
 // Mouse Events 
 // ===========================================
 // ===========================================
+
+// video hover Over function
+var videoOver = function(){
+	// clear out the device 
+	$('.available-options').empty();
+	// show the device div
+	$('.device-options').show();
+	// get all recording devices from system
+	var cams = flash.getCameras();
+
+	for (var i = 0; i < cams.length; i++){
+		// add a "a" tag with the label in it
+		$('.available-options').append('<a class="selected-device" index_number="'+i+'">'+cams[i]+'</a>');
+	}
+	// video option click function
+	$('.selected-device').click(function(e){
+		_videoDevice = $(this).attr('index_number');
+		e.preventDefault;
+		e.stopPropagation();
+		$('.device-options').hide();
+		return false;
+	});
+	
+}// end video Over function
+// ===================
+var recordOver = function(){
+
+	// clear out the devices
+	$('.available-options').empty();
+	// show the device div
+	$('.device-options').show();
+	var mics = flash.getMicrophones();
+
+	for (var i = 0; i < mics.length; i ++){
+		// add a "a" tag with the label in it
+		$('.available-options').append('<a class="selected-device" index_number="'+i+'">'+mics[i]+'</a>');
+	}
+	// add all devices to div
+
+	// audio option click function
+	$('.selected-device').click(function(e){
+		_recordingDevice = $(this).attr('index_number');
+		e.preventDefault;
+		e.stopPropagation();
+		$('.device-options').hide();
+		return false;
+	});
+
+	
+
+}// end record over function
+// ===================
+
+// set video slider handle 
+var setVideoSlider = function(){
+	console.log('set position');
+
+	// use the position of the slider handle to set the 
+	// position of the video playback\
+
+	xPos = _seekTime / _duration * 300;
+	//Xpos /  Width  * duration = seektime
+	handlePos = $('.slider-handle').offset().left;
+	seekTime = handlePos / 300 * _duration;
+	flash.setTime(seekTime);
+	
+	console.log(seekTime);
+
+}// end setVideoSlider function
+// ===================
 
 // Play function
 var playVideo = function(){
@@ -145,16 +290,16 @@ var handleManager = function(sliderType, e){
 	*/
 	var mouseX 					= e.pageX;
 	var mouseY 					= e.pageY;
+	var videoWidth 				= 300;
 	var videoHandle 			= $('.slider-handle').offset().left;
 	var videoHandleWidth 		= $('.slider-handle').width();
 	var videoBar 				= $('.slider-bar').offset().left;
 	var soundHandle 			= $('.sound-slider-handle').offset().left;
 	var soundHandleWidth 		= $('.sound-slider-handle').width();
 	var soundBar 				= $('.sound-slider-bar').offset().left;
-	var vSeekTime				= 0;
-	var sSeekTime				= 0;
-	
-	var sPos					= '';
+	var vXpos 					= 0;
+	var sXpos 					= 0;
+	var sVolume 				= 0;
 
 	
 	if (sliderType == 'video'){
@@ -168,23 +313,17 @@ var handleManager = function(sliderType, e){
 		}// end if 
 
 		// reset the handle if it gets
-		if (videoHandle > videoBar + 300){
-			$('.slider-handle').offset({left: videoBar+300 - videoHandleWidth});
+		if (videoHandle > videoBar + videoWidth){
+			$('.slider-handle').offset({left: videoBar+videoWidth - videoHandleWidth});
 		}// end if 
 
-		// get the position of the slider on the slider bar 
-		//SeekTime / duration  * width  = Xpos
-		//Xpos /  Width  * duration = seektime
-
 		// on mouse up use this value to set the time 
-		vSeekTime = (videoHandle - videoBar) / 300 * _duration; 
+		_seekTime = (videoHandle - videoBar) / videoWidth* _duration; 
 
 
 
-		
-		
-
-
+		vXpos = _seekTime / _duration * videoWidth;
+		console.log(vXpos);
 
 	}// end video if 
 	if (sliderType == 'sound'){
@@ -196,36 +335,38 @@ var handleManager = function(sliderType, e){
 		if (soundHandle > soundBar + 100){
 			$('.sound-slider-handle').offset({left: soundBar+100 - soundHandleWidth})
 		}
+		
+		if (sVolume > 90){
+			sVolume = .9;
+		}
+		else if (sVolume < 0){
+			sVolume = 0;
+		}else{
+			sVolume = (soundHandle - soundBar) / 100;
+		}
+		sVolume;
+		// check the stae of the volume
+		// swap out icons depending on the volume level
+		console.log(sVolume);
+		if (sVolume >= .5){
+			console.log('volume up ');
+			$('.glyphicon-volume-up').show();
+			$('.glyphicon-volume-down').hide();
+			$('.glyphicon-volume-off').hide();
+		}
+		else if (sVolume > 0){
+			$('.glyphicon-volume-up').hide();
+			$('.glyphicon-volume-down').show();
+			$('.glyphicon-volume-off').hide();
+		}
+		else if (sVolume <= 0){
+			$('.glyphicon-volume-up').hide();
+			$('.glyphicon-volume-down').hide();
+			$('.glyphicon-volume-off').show();
+		}
+
+		flash.setVolume(sVolume);
 	}
-	// $(document).mousemove(function(e){
-
-	// 	if (_mouseDown){
-	// 		if (sliderType == 'video'){
-	// 			console.log('video is on');
-	// 			mouseX = e.pageX;
-	// 			mouseY = e.pageY;
-	// 			handle = $('.slider-handle').offset().left;
-	// 			handleWidth = $('.slider-handle').width();
-	// 			bar = $('.slider-bar').offset().left;
-	// 			// console.log(mouseX);
-	// 			$('.slider-handle').offset({left: mouseX });
-
-	// 			if (handle < bar){
-	// 				console.log('lower');
-	// 				$('.slider-handle').offset({left: bar});
-	// 			}// end if 
-	// 			if (handle > bar+ 300){
-	// 				console.log('higher');
-	// 				$('.slider-handle').offset({left: bar+300 - handleWidth});
-	// 			}// end if 
-	// 		}// end Video if
-
-	// 		if (sliderType == 'sound'){
-
-	// 			console.log('sound is on');
-	// 		}
-	// 	}// end mouse down if  
-	// });// end mouse movue function
 }// end Handle Manager
 // ===================
 
@@ -292,7 +433,16 @@ var seekTime = function(time){
 	// setting global seek tie 
 	_seekTime = Math.floor(currentTime);
 	
+	// if the video slider handle is not being pressed 
+	if (!_playerMouseDown){
+		//SeekTime / duration  * width  = Xpos
+		xPos = _seekTime / _duration * 300;
+		// set the position of the video slider handle 
+		$('.slider-handle').offset({left: xPos + $('.slider-bar').offset().left
+		 - ($('.slider-handle').width()/2)});
+		
 
+	}
 }// end Seek Time 
 // ===================
 
