@@ -15,10 +15,24 @@
 	}
 	// ===========================
 
+	$my_data = $_POST;
+
 	if( $action == "home"){
 		$view_model = new View_Model();
-		$view_model->get_view("../views/index.html");
+
+		$view_model->get_view('../views/htmlHeader.html');
+		$view_model->get_view('../views/pageNav.html');
+		$view_model->get_view('../views/pageFooter.html');
+
+	}elseif ($action == "getLogin"){
+		$view_model = new View_Model();
+		$view_model->get_view('../views/login.html');
+	}// end else 
+	elseif($action == "getLoggedIn"){
+		$view_model = new View_Model();
+		$view_model->get_view('../views/playerAndSlider.html');
 	}
+
 	// end home
 	// ==============================================
 

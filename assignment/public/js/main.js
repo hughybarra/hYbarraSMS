@@ -11,14 +11,15 @@ Questions for the teacher
 
 2. My sliders are very buggy. Any advice on how to fix this? 
 
+3. set time is buggy when you drop the slider to set the time. it bouces left and then shoots to the 
+current time. 
+
 */
 
 var flashReady = function(){
-
-
-	// Slider Init 
 	playerControllers();
 }
+
 
 // Player Controllers
 // ===========================================
@@ -62,6 +63,8 @@ var playerControllers = function(){
 	$('.glyphicon-volume-up').hide();
 	$('.glyphicon-volume-off').hide();
 
+	// Set volume handle to .5
+	$('.sound-slider-handle').offset({left: $('.sound-slider-bar').offset().left + 50});
 
 	// auto hide device options
 	$('.device-options').hide();
@@ -99,7 +102,6 @@ var playerControllers = function(){
 		_mouseDown = false;
 		_playerMouseDown = false;
 		_soundMouseDown = false;
-
 	});// end mouse up function
 
 	$('.sound-slider-handle').mousedown( function(e){
@@ -144,32 +146,40 @@ var playerControllers = function(){
 		$('.device-options').hide();
 	});// end options div click function
 
+	var recording = false;
 	// begin recording click function
 	$('.glyphicon-play-circle').click(function(e){
 		
-		console.log('begin recording');
+		if (!recording){
+			console.log('recording');
+			// if chosen use select mic / video device
 
-		// if chosen use select mic / video device
+			// check if mic has been selected
+			if (!_recordingDevice){
+				// use the first device as default
+				_recordingDevice = 0;
+			}
+			// check if video device has been selected
+			if (!_videoDevice){
+				// use the first device as default
+				_videoDevice = 0;
+			}
+			// start recording the video
+			// the flash icon is popping up but I cant do anything 
+			// think its broken
+			flash.startRecording(_fileName,_videoDevice,_recordingDevice);
 
-		// check if mic has been selected
-		if (!_recordingDevice){
-			// use the first device as default
-			_recordingDevice = 0;
-
+			// toggle recording option
+			recording = true;
+		}else{
+			console.log('stop recording');
+			flash.stopRecording();
 		}
-		// check if video device has been selected
-		if (!_videoDevice){
-			// use the first device as default
-			_videoDevice = 0;
-		}
-		// start recording the video
-
-		console.log(_videoDevice);
-		console.log(_recordingDevice);
-		// the flash icon is popping up but I cant do anything 
-		// think its broken
-		flash.startRecording(_fileName,_videoDevice,_recordingDevice);
 	});
+
+	// auto connect to the server
+	// connect to the server
+	flash.connect(_serverUrl);
 }// end player Controllers 
 // ===================
 
@@ -238,28 +248,30 @@ var setVideoSlider = function(){
 
 	xPos = _seekTime / _duration * 300;
 	//Xpos /  Width  * duration = seektime
-	handlePos = $('.slider-handle').offset().left;
-	seekTime = handlePos / 300 * _duration;
-	flash.setTime(seekTime);
-	
-	console.log(seekTime);
+	handlePos =  $('.slider-handle').offset().left - $('.slider-bar').offset().left;
+
+	videoSeekTime =  (handlePos / 300 * _duration);
+	console.log(videoSeekTime);
+
+	flash.setTime(Math.floor(videoSeekTime));
+
+	// The flash . set time function is a little glitchy 
 
 }// end setVideoSlider function
 // ===================
 
 // Play function
 var playVideo = function(){
-
 	console.log('play Clicked');
 	$('.glyphicon-pause').show();
 	$('.glyphicon-play').hide();
 
 	// first play click 
 	if (_firstClick){
-		// connect to the server
-		flash.connect(_serverUrl);
 		_firstClick = false;
 
+		// moved this here 
+		flash.startPlaying(_videoTitle);
 	}else{
 		flash.playPause();
 	}// end if 
@@ -301,39 +313,42 @@ var handleManager = function(sliderType, e){
 	var sXpos 					= 0;
 	var sVolume 				= 0;
 
-	
+
 	if (sliderType == 'video'){
-		// $('.slider-handle').offset({left: mouseX});
-
-		$('.slider-handle').offset({left: mouseX});
-
 		// reset the handle if it goes to low
-		if (videoHandle < videoBar){
+		if (mouseX < videoBar){
 			$('.slider-handle').offset({left: videoBar});
 		}// end if 
-
 		// reset the handle if it gets
-		if (videoHandle > videoBar + videoWidth){
+		else if (mouseX > videoBar + videoWidth){
 			$('.slider-handle').offset({left: videoBar+videoWidth - videoHandleWidth});
 		}// end if 
+		else{
+			$('.slider-handle').offset({left: mouseX});
+		}
 
 		// on mouse up use this value to set the time 
 		_seekTime = (videoHandle - videoBar) / videoWidth* _duration; 
-
-
 
 		vXpos = _seekTime / _duration * videoWidth;
 		console.log(vXpos);
 
 	}// end video if 
 	if (sliderType == 'sound'){
-		$('.sound-slider-handle').offset({left: mouseX});
-		// reset the handle if it goes too low
-		if (soundHandle < soundBar){
+		// reset the handle if it goes too low\
+
+
+		// So we gonna use the position of the mouse instead of the position of the handle
+		if (mouseX 	 < soundBar){
+			console.log('soundHandle < soundBar',soundHandle < soundBar)
 			$('.sound-slider-handle').offset({left: soundBar});
 		}// end if 
-		if (soundHandle > soundBar + 100){
+		else if(mouseX 	 >= soundBar + 100 - soundHandleWidth){
 			$('.sound-slider-handle').offset({left: soundBar+100 - soundHandleWidth})
+		}
+		else
+		{
+			$('.sound-slider-handle').offset({left: mouseX});
 		}
 		
 		if (sVolume > 90){
@@ -384,11 +399,10 @@ var connected = function(success, error){
 		@param success - (Boolean) if the connection was successful.
 		@param error - (String) the message if connection was unsuccessful.
 	*/	
-	console.log(success);
+	// console.log(success);
 
 	if (success){
-		console.log('running');
-		flash.startPlaying(_videoTitle);
+		// set the volume 
 		flash.setVolume(_volume);
 	}else{
 		console.log('--------------------------------');
@@ -403,7 +417,8 @@ var seekTime = function(time){
 	/*
 		This function is called when playing back a video.
 		@param time - (Number) holds the current time (in seconds) of the video.
-	*/
+	*/	
+	//console.log(time);
 
 	var currentTime = Math.floor(time);
 	var minutes = 0;
@@ -425,7 +440,6 @@ var seekTime = function(time){
 
 	seconds = currentTime - counter;
 
-
 	// set minutes and seconds on vieo player
 	$('.minutes').text(pad(minutes));
 	$('.seconds').text(pad(seconds));
@@ -440,8 +454,6 @@ var seekTime = function(time){
 		// set the position of the video slider handle 
 		$('.slider-handle').offset({left: xPos + $('.slider-bar').offset().left
 		 - ($('.slider-handle').width()/2)});
-		
-
 	}
 }// end Seek Time 
 // ===================
@@ -487,10 +499,10 @@ var globalError = function(message){
 		This function is called if there are any flash errors.
 		@param message - (String) holds the message of what went wrong.
 	*/
-	console.log('------------------------');
-	console.log('---- Error Message -----');
-	console.log(message);
-	console.log('------------------------');
+	// console.log('------------------------');
+	// console.log('---- Error Message -----');
+	// console.log(message);
+	// console.log('------------------------');
 }// end global ERror
 // ===================
 
