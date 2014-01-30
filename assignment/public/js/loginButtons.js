@@ -41,6 +41,10 @@ $(document).ready(function(){
 			attemptLogin(user);
 		}else{
 			console.log('form invalid');
+			$('#simple-user-password').addClass('invalid');
+			$('#simple-user-email').addClass('invalid');
+			// for testing only remove when done
+			attemptLogin(user);
 		}
 		
 		e.preventDefault;
@@ -54,9 +58,7 @@ $(document).ready(function(){
 		// hide login form
 		$('.simple-login').hide();
 		// show signup form
-		$('.simple-sign-up').show();
-
-		
+		$('.simple-sign-up').show();		
 		e.preventDefault;
 		e.stopPropagation();
 		return false;
@@ -116,10 +118,6 @@ $(document).ready(function(){
 			console.log('sing up form invalid')
 		}// end if 
 
-
-
-
-
 		e.preventDefault;
 		e.stopPropagation();
 		return false;
@@ -137,6 +135,14 @@ $(document).ready(function(){
 		e.stopPropagation();
 		return false;
 	});// end back button 
+
+	// remove invalid class if it is there
+	$('#simple-user-password').focus(function(){
+		$('#simple-user-password').removeClass('invalid');
+	})
+	$('#simple-user-email').focus(function(){
+		$('#simple-user-email').removeClass('invalid');
+	})// end function
 });// end document ready function
 
 

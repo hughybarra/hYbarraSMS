@@ -7213,7 +7213,7 @@ body{
   float: left;
   width: 100px;
   height: 10px;
-  background-color: blue;
+  background-color: #ffffff;
   curos: pointer;
 
   -moz-border-radius: 10px;
@@ -7236,7 +7236,7 @@ body{
   /* width = 300px */
   width: 300px;
   height: 10px;
-  background-color: yellow;
+  background-color: #ffffff;
   cursor: pointer;
 
   -moz-border-radius: 10px;
@@ -7296,6 +7296,8 @@ body{
   float: right;
   width: 300px;
   margin-left: 290px;
+
+  /*margin-bottom: 800px;*/
   margin-top: 440px;
   height: 50px;
   border: 3px solid #000000;
@@ -7342,9 +7344,13 @@ body{
   /*background-color: blue;*/
   height: 450px;
   width: 400px;
+  /*overflow-y: scroll;*/
+}
+.comment-div{
+  height: 450px;
+  width: 400px;
   overflow-y: scroll;
 }
-
 #comment-box{
   width:300px;
   float: left;
@@ -7357,7 +7363,30 @@ body{
 textarea {
   resize: none;
 }
-
+.single_comment{
+  background-color: rgba(0,0,0, .5);
+  height: 100px;
+  /*overflow: auto;*/
+  width: 350px;
+  margin-top: 5px;
+  float:left;
+  -moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px; /* future proofing */
+-khtml-border-radius: 10px; /* for old Konqueror browsers */
+}
+.single_comment span{
+  color: #DCDDDE;
+  font-size: .9em;
+  font-family: "helvetica neue";
+  margin-left: 10px;
+}
+.user_email{
+  float: left;
+  width: 100%;
+  margin-top: 5px;
+  clear: left;
+}
 /* Fixing the Form Sizes*/
 
 .login-forms input{
@@ -7373,7 +7402,7 @@ textarea {
   background-color: red;
 }
 
-
+ 
 
 
 
