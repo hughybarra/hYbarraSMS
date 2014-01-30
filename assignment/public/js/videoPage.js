@@ -99,9 +99,20 @@ var chatControllers = function(){
 
 	$('.chat-send-button').click(function(e){
 		var _newMessageRef = _messageListRef.push();
+
+
+		if(_userEmail === undefined){
+			var data = 'Anon User';
+		}else{
+			var data = _userEmail;
+			
+		}
 		_newMessageRef.set({
-			'user_email': _userEmail, 
-			'comment': $('#comment-box').val() 
+
+			'user_email': data,
+
+			'comment': $('#comment-box').val()
+			 
 		})
 
 		e.stopPropagation;

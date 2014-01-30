@@ -4613,6 +4613,9 @@ textarea.input-group-sm > .input-group-btn > .btn {
   }
   .navbar-form .form-control {
     display: inline-block;
+
+
+
   }
   .navbar-form select.form-control {
     width: auto;
@@ -7401,7 +7404,9 @@ border-radius: 10px; /* future proofing */
 .invalid{
   background-color: red;
 }
-
+.left-form{
+  width: 300px;
+}
  
 
 

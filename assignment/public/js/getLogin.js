@@ -21,6 +21,7 @@ var getAuth = function(){
 
 
 	var chatRef = new Firebase('https://glaring-fire-7611.firebaseIO.com');
+	
 	var auth = new FirebaseSimpleLogin(chatRef, function(error, user) {
 		if (error) {
 		    // an error occurred while attempting login

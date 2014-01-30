@@ -1,5 +1,16 @@
 $(document).ready(function(){
 	$('.simple-sign-up').hide();
+
+	// github login 
+	$('.left-button').click(function(e){
+		// log into the server anonymously
+		auth.login('anonymous');
+
+		e.preventDefault;
+		e.stopPropagation;
+		return false;
+	});// end github login 
+
 	// simple login button
 	$('#simple-login-button').click(function(e){
 		console.log('login button clicked');
